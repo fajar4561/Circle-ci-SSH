@@ -1,0 +1,16 @@
+name : build
+container:
+  image: fajar4561/aosp-builder:latest
+  cpu: 8
+  memory: 32G
+
+task:
+  script:
+        - apt-get update && apt-get upgrade -y
+        - apt-get install python libncurses5 libncurses6 ccache -y
+        - git config --global user.name "fajar4561"
+        - git config --global user.email "maulanafajar751@gmail.com"
+        - mkdir ~/bin
+        - PATH=~/bin:$PATH
+        - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+        - chmod a+x ~/bin/repo        
