@@ -13,4 +13,20 @@ task:
         - mkdir ~/bin
         - PATH=~/bin:$PATH
         - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-        - chmod a+x ~/bin/repo        
+        - chmod a+x ~/bin/repo
+        - cd /tmp
+        - wget https://roms.apon77.workers.dev/ccache/ci2/ccache.tar.gz
+        - time tar xf ccache.tar.gz
+        - rm -rf ccache.tar.gz
+        - mkdir -p rom && cd rom
+        - repo init --depth=1 --no-repo-verify -u git://github.com/DotOS/manifest.git -b dot11 -g default,-mips,-darwin,-notdefault
+        - git clone https://github.com/fajar4561/local_manifest.git --depth 1 -b dot .repo/local_manifests
+        - repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j8
+        - source build/envsetup.sh
+        - lunch dot_X00TD-userdebug
+        - export CCACHE_DIR=/tmp/ccache
+        - export CCACHE_EXEC=$(which ccache)
+        - export USE_CCACHE=1
+        - ccache -M 8G
+        - ccache -z
+        - make bacon
